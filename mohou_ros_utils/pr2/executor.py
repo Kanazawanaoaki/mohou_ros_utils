@@ -12,7 +12,7 @@ from mohou_ros_utils.pr2.controller_utils import check_pr2_is_executable
 
 class RarmInterface(PR2ROSRobotInterface):
     def default_controller(self):
-        return [self.rarm_controller, self.torso_controller, self.head_controller]
+        return [self.rarm_controller]
 
 
 class SkrobotPR2Executor(ExecutorBase):
