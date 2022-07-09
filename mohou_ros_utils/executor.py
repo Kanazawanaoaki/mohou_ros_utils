@@ -84,7 +84,7 @@ class ExecutorBase(ABC):
     joint_cont_state_msg: Optional[JointControllerState] = None
     current_av: Optional[AngleVector] = None
 
-    def __init__(self, project_name: str, dryrun=True, save_rosbag=True) -> None:
+    def __init__(self, project_name: str, dryrun=True, save_rosbag=True, hz=1.0) -> None:
         propagator = create_default_propagator(project_name)
 
         ae_type = auto_detect_autoencoder_type(project_name)
@@ -110,7 +110,9 @@ class ExecutorBase(ABC):
         # start!
         self.debug_images_seq = []
         self.edict_seq = []
-        self.hz = 1.0
+        # self.hz = 1.0
+        # self.hz = 2.0
+        self.hz = hz
         rospy.Timer(rospy.Duration(1.0 / self.hz), self.on_timer)
         self.running = False
         self.is_terminatable = False

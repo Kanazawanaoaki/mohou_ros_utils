@@ -19,6 +19,13 @@ class SkrobotPR2Executor(ExecutorBase):
     robot_model: PR2
     robot_interface: RarmInterface
 
+    angle_vector_time: float
+
+    def __init__(self, project_name: str, dryrun=True, save_rosbag=True, hz=1.0, angle_vector_time=1.0) -> None:
+        super().__init__(project_name, dryrun, save_rosbag, hz)
+        self.angle_vector_time=angle_vector_time
+
+
     def post_init_hook(self):
         robot_model = PR2()
         self.robot_model = robot_model
@@ -41,8 +48,12 @@ class SkrobotPR2Executor(ExecutorBase):
             self.robot_model.__dict__[joint_name].joint_angle(angle)
 
         if not self.dryrun:
+            # self.robot_interface.angle_vector(
+            #     self.robot_model.angle_vector(), time=1.0, time_scale=1.0)
+            # self.robot_interface.angle_vector(
+            #     self.robot_model.angle_vector(), time=0.6, time_scale=1.0)
             self.robot_interface.angle_vector(
-                self.robot_model.angle_vector(), time=1.0, time_scale=1.0)
+                self.robot_model.angle_vector(), time=self.angle_vector_time, time_scale=1.0)
 
             if GripperState in edict_next:
                 # TOOD(HiroIshdia): handle gs is multi
