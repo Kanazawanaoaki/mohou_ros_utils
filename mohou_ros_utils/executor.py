@@ -15,6 +15,7 @@ import signal
 import time
 from moviepy.editor import ImageSequenceClip
 from pr2_controllers_msgs.msg import JointControllerState
+from cv_bridge import CvBridge
 
 from mohou.propagator import Propagator
 from mohou.model.autoencoder import AutoEncoderBase
@@ -107,6 +108,7 @@ class ExecutorBase(ABC):
         rospy.Subscriber(config.topics.get_by_mohou_type(AngleVector).name, JointState, self.on_joint_state)
         rospy.Subscriber(config.topics.get_by_mohou_type(RGBImage).name, CompressedImage, self.on_rgb)
         rospy.Subscriber(config.topics.get_by_mohou_type(GripperState).name, JointControllerState, self.on_joint_cont_state)
+        self.image_pub = rospy.Publisher("debug_image", Image, queue_size=1)
 
         self.post_init_hook()
         self.dryrun = dryrun
@@ -173,6 +175,9 @@ class ExecutorBase(ABC):
         dimages = DebugImages(robot_camera_view, edict_current[RGBImage], reconstructed, edict_next[RGBImage])
         self.debug_images_seq.append(dimages)
         self.edict_seq.append(edict_current)
+        debug_image_msg = CvBridge().cv2_to_imgmsg(dimages.numpy(), encoding="rgb8")
+        debug_image_msg.header.stamp = rospy.Time.now()
+        self.image_pub.publish(debug_image_msg)
 
         self.send_command(edict_next, edict_current)
 
