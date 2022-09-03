@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 import numpy as np
 import rospy
-from mohou.types import AngleVector, AnotherGripperState, ElementDict, GripperState
+from mohou.types import AngleVector, AnotherGripperState, ElementDict, GripperState, TerminateFlag
 from skrobot.interfaces.ros import PR2ROSRobotInterface  # type: ignore
 from skrobot.model import Joint
 from skrobot.models import PR2
@@ -44,6 +44,9 @@ class SkrobotPR2Executor(ExecutorBase):
         av_current = edict_current[AngleVector]
         av_next = edict_next[AngleVector]
         rospy.loginfo("current_av {}, next_av {}".format(av_current.numpy(), av_next.numpy()))
+
+        tf_next = edict_next[TerminateFlag]
+        rospy.loginfo("TerminateFlag {}".format(tf_next.numpy()))
 
         for angle, joint_name in zip(av_next.numpy(), self.control_joint_names):
             self.robot_model.__dict__[joint_name].joint_angle(angle)
