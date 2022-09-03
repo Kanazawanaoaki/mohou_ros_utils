@@ -1,12 +1,18 @@
 #!/usr/bin/env python3
 import numpy as np
 import rospy
-from mohou.types import AngleVector, AnotherGripperState, ElementDict, GripperState, TerminateFlag
+from mohou.types import (
+    AngleVector,
+    AnotherGripperState,
+    ElementDict,
+    GripperState,
+    TerminateFlag,
+)
+from mohou_ros.msg import ControlCommand
 from skrobot.interfaces.ros import PR2ROSRobotInterface  # type: ignore
 from skrobot.model import Joint
 from skrobot.models import PR2
 
-from mohou_ros.msg import ControlCommand
 from mohou_ros_utils.executor import ExecutorBase
 from mohou_ros_utils.pr2.controller_utils import check_pr2_is_executable
 
