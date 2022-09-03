@@ -125,6 +125,7 @@ class ExecutorBase(ABC):
 
         self._post_init()
         self.dryrun = dryrun
+        self.terminate_threthold = terminate_threthold
 
         # start!
         self.debug_images_seq = []
