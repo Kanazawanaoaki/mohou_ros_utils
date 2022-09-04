@@ -105,7 +105,7 @@ class ExecutorBase(ABC):
     current_av: Optional[AngleVector] = None
 
     def __init__(
-        self, project_path: Path, dryrun=True, save_rosbag=True, terminate_threthold=0.98
+        self, project_path: Path, dryrun=True, save_rosbag=True, terminate_threthold: float = 0.98
     ) -> None:
         propagator: Propagator = create_default_propagator(project_path, Propagator)
 
